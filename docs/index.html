@@ -1,236 +1,193 @@
-<!doctype html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f8f8f5">
-    <meta name="description" content="EduFocus helps students turn long lessons into smaller, more focused study sessions.">
-    <title>EduFocus — Small steps. Every day.</title>
-    <style>
-        :root {
-            color-scheme: light;
-            --paper: #f8f8f5;
-            --ink: #161616;
-            --muted: #66665e;
-            --line: #c6c6be;
-            --panel: #eeeee8;
-            font-family: "Courier New", monospace;
-            font-size: 15px;
-            line-height: 1.65;
-            color: var(--ink);
-            background: var(--paper);
-            scroll-behavior: smooth;
-        }
-        *, *::before, *::after { box-sizing: border-box; }
-        body { margin: 0; }
-        a { color: inherit; text-underline-offset: 5px; }
-        a:focus-visible, button:focus-visible { outline: 3px solid #666; outline-offset: 5px; }
-        h1, h2, h3, p { margin-top: 0; }
-        h1, h2, h3 { line-height: 1.45; text-wrap: balance; }
-        .container { width: min(1180px, calc(100% - 48px)); margin-inline: auto; }
-        .skip { position: fixed; top: -100px; left: 16px; z-index: 5; padding: 10px 16px; color: white; background: var(--ink); }
-        .skip:focus { top: 8px; }
-        .header { position: sticky; top: 0; z-index: 4; border-bottom: 1px solid var(--ink); background: var(--paper); }
-        .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-        .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-family: monospace; font-size: 16px; font-weight: 700; letter-spacing: -1px; }
-        .brand svg { width: 29px; height: 29px; }
-        .links { display: flex; align-items: center; gap: 26px; font-size: 13px; }
-        .links a { text-decoration: none; }
-        .links a:hover { text-decoration: underline; }
-        .menu { display: none; padding: 8px 12px; color: var(--ink); background: transparent; border: 1px solid var(--ink); font: inherit; }
-        .hero { display: grid; grid-template-columns: 1fr .95fr; gap: 56px; align-items: center; padding-block: 76px; }
-        .eyebrow { margin-bottom: 20px; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; }
-        .square { display: inline-block; width: 7px; height: 7px; margin-right: 8px; background: currentColor; }
-        .hero h1, .pixel-heading { font-family: "Courier New", monospace; font-weight: 700; letter-spacing: -2px; }
-        .hero h1 { margin-bottom: 24px; font-size: clamp(36px, 5vw, 62px); line-height: 1.15; }
-        .hero h1 span { display: block; margin-top: 16px; font-size: clamp(20px, 2.4vw, 29px); line-height: 1.35; letter-spacing: -1px; }
-        .caret { color: #777; }
-        .lead { max-width: 500px; color: var(--muted); font-size: 17px; line-height: 1.85; }
-        .button { display: inline-flex; align-items: center; justify-content: center; gap: 20px; min-height: 49px; padding: 11px 20px; color: white; background: var(--ink); border: 1px solid var(--ink); box-shadow: 3px 3px 0 var(--paper), 4px 4px 0 var(--ink); text-decoration: none; font-size: 13px; font-weight: 700; }
-        .button:hover { background: #333; }
-        .hero-note { margin-top: 27px; color: var(--muted); font-size: 11px; }
-        .hero-note strong { margin-right: 8px; color: var(--ink); font-size: 18px; }
-        .art { position: relative; min-height: 390px; overflow: hidden; border: 1px solid var(--ink); background: #e8e8e1; box-shadow: 8px 8px 0 #deded7; }
-        .window { position: relative; z-index: 1; display: flex; justify-content: space-between; padding: 10px 14px; border-bottom: 1px solid var(--ink); background: var(--paper); font-size: 9px; letter-spacing: 1px; }
-        .note { position: absolute; top: 78px; width: 90px; height: 100px; padding: 16px 10px; background: var(--paper); border: 1px solid var(--ink); box-shadow: 4px 4px 0 #d4d4cc; font-size: 9px; line-height: 2; }
-        .note-one { left: 9%; transform: rotate(-8deg); }
-        .note-two { right: 9%; transform: rotate(8deg); }
-        .note-center { top: 110px; left: 50%; width: 105px; height: 62px; transform: translateX(-50%); text-align: center; font-size: 20px; line-height: 1.8; }
-        .buddy { position: absolute; right: 0; bottom: 56px; left: 0; display: grid; justify-items: center; }
-        .cat { position: relative; width: 190px; height: 140px; border: 3px solid var(--ink); border-radius: 48% 48% 35% 35%; background: #222; }
-        .cat::before, .cat::after { position: absolute; top: -28px; width: 0; height: 0; content: ""; border-right: 38px solid transparent; border-bottom: 52px solid #222; border-left: 38px solid transparent; }
-        .cat::before { left: 5px; transform: rotate(-13deg); }
-        .cat::after { right: 5px; transform: rotate(13deg); }
-        .eyes { position: absolute; top: 47px; right: 0; left: 0; display: flex; justify-content: center; gap: 35px; }
-        .eyes i { width: 18px; height: 27px; border: 2px solid var(--paper); border-radius: 50%; background: var(--paper); }
-        .muzzle { position: absolute; top: 82px; left: 50%; width: 10px; height: 7px; transform: translateX(-50%); background: #aaa; }
-        .desk { position: absolute; right: 0; bottom: 0; left: 0; height: 64px; border-top: 3px solid var(--ink); background: var(--paper); }
-        .book { position: absolute; bottom: 70px; left: 5%; width: 95px; padding: 9px; transform: rotate(-8deg); border: 2px solid var(--ink); background: var(--paper); font-size: 9px; text-align: center; }
-        .book-two { bottom: 93px; left: 7%; }
-        .pencils { position: absolute; right: 8%; bottom: 64px; display: flex; align-items: end; gap: 7px; height: 80px; }
-        .pencils i { width: 9px; height: 70px; border: 1px solid var(--ink); background: var(--paper); }
-        .pencils i:nth-child(2) { height: 84px; transform: rotate(9deg); }
-        .pencils i:nth-child(3) { height: 61px; transform: rotate(-8deg); }
-        .caption { position: absolute; top: 202px; left: 24px; z-index: 2; font-size: 9px; letter-spacing: 1px; }
-        .caption strong { display: block; margin-top: 8px; font-size: 14px; letter-spacing: 0; }
-        .ticker { border-block: 1px solid var(--ink); }
-        .ticker-inner { display: flex; justify-content: space-between; align-items: center; gap: 14px; padding-block: 15px; font-size: 10px; letter-spacing: 1px; }
-        .ticker b { font-size: 17px; }
-        .section { padding-block: 76px; }
-        .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 36px; margin-bottom: 35px; }
-        .section-heading h2, .goal h2 { margin: 0; font-size: clamp(24px, 3vw, 34px); }
-        .section-heading > p { margin: 0 0 5px; color: var(--muted); font-size: 12px; line-height: 1.9; }
-        .steps { display: grid; grid-template-columns: repeat(5, 1fr); margin: 0; padding: 0; list-style: none; border: 1px solid var(--ink); }
-        .steps li { min-height: 190px; padding: 22px 17px; border-right: 1px solid var(--ink); }
-        .steps li:last-child { border-right: 0; }
-        .number { display: block; margin-bottom: 23px; color: #777; font-size: 20px; font-weight: 700; }
-        .steps h3 { min-height: 42px; margin-bottom: 8px; font-size: 14px; }
-        .steps p, .feature p { margin: 0; color: var(--muted); font-size: 12px; }
-        .feature-section { border-block: 1px solid var(--line); background: var(--panel); }
-        .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
-        .feature { position: relative; min-height: 185px; padding: 20px; border: 1px solid #bbbcb2; background: var(--paper); }
-        .icon { display: grid; width: 39px; height: 39px; place-items: center; border: 1px solid var(--ink); font-size: 23px; }
-        .index { position: absolute; top: 19px; right: 19px; color: #888; font-size: 10px; }
-        .feature h3 { margin: 18px 0 9px; font-size: 14px; }
-        .goal { padding-block: 78px; text-align: center; }
-        .goal .eyebrow { margin-bottom: 16px; }
-        .goal p:not(.eyebrow) { margin: 16px auto 25px; color: var(--muted); font-size: 13px; }
-        .demo-notice { margin-top: 28px; padding: 13px 16px; border: 1px solid #aaa; background: var(--panel); color: #45453f; font-size: 11px; line-height: 1.7; }
-        .footer { padding-block: 25px; border-top: 1px solid var(--ink); }
-        .footer-inner { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 28px; }
-        .footer p { margin: 0; color: var(--muted); font-size: 11px; }
-        .footer small { margin-left: auto; color: #777; font-size: 10px; }
-        @media (max-width: 850px) {
-            .hero { gap: 30px; padding-block: 55px; }
-            .steps { grid-template-columns: 1fr; }
-            .steps li { min-height: 0; display: grid; grid-template-columns: 42px 1fr; gap: 0 16px; border-right: 0; border-bottom: 1px solid var(--ink); }
-            .steps li:last-child { border-bottom: 0; }
-            .number { grid-row: span 2; align-self: center; margin: 0; }
-            .steps h3 { min-height: 0; margin-bottom: 5px; }
-            .features { grid-template-columns: repeat(2, 1fr); }
-        }
-        @media (max-width: 620px) {
-            .container { width: calc(100% - 36px); }
-            .nav { min-height: 68px; flex-wrap: wrap; }
-            .menu { display: block; }
-            .links { display: none; flex-basis: 100%; flex-wrap: wrap; gap: 12px 22px; padding: 0 0 16px; }
-            .links.open { display: flex; }
-            .hero { grid-template-columns: 1fr; gap: 34px; padding-block: 42px; }
-            .hero h1 { font-size: 39px; }
-            .art { min-height: 340px; }
-            .ticker-inner { flex-wrap: wrap; justify-content: center; font-size: 8px; }
-            .ticker-inner b:nth-of-type(even) { display: none; }
-            .section { padding-block: 52px; }
-            .section-heading { display: block; }
-            .section-heading > p { margin-top: 17px; }
-            .features { grid-template-columns: 1fr; }
-            .feature { min-height: 0; }
-            .footer small { margin-left: 0; }
-        }
-    </style>
-</head>
-<body>
-    <a class="skip" href="#main">Skip to content</a>
-    <header class="header">
-        <nav class="nav container" aria-label="Main navigation">
-            <a class="brand" href="#home" aria-label="EduFocus home">
-                <svg viewBox="0 0 72 72" aria-hidden="true"><path fill="currentColor" d="M24 0h44v48H46V24H24ZM2 24h22v24H2Zm22 24h22v24H24Zm32 10h14v14H56Z"/></svg>
-                <span>EduFocus</span>
-            </a>
-            <button class="menu" type="button" aria-expanded="false" aria-controls="nav-links">Menu ☰</button>
-            <div class="links" id="nav-links">
-                <a href="#home" aria-current="page">Home</a>
-                <a href="#how-it-works">How it works</a>
-                <a href="#features">Features</a>
-                <a href="#about">About</a>
-            </div>
+    <meta name="description" content="EduFocus helps students study in shorter, more interactive sessions. Organize your PDF lessons and make time to focus.">
+    <title>Home - EduFocus</title>
+    <link rel="preload" as="style" href="./assets/app-BjWMi0OD.css" /><link rel="modulepreload" as="script" href="./assets/app-Do980UDv.js" /><link rel="stylesheet" href="./assets/app-BjWMi0OD.css" /><script type="module" src="./assets/app-Do980UDv.js"></script><style>
+.site-demo-notice{max-width:520px;margin:20px 0 0;padding:10px 13px;border:1px solid #aaa;background:#eeeee8;color:#45453f;font-size:10px;line-height:1.7}
+</style></head>
+<body class="site-page">
+        <a class="site-skip" href="#main-content">Skip to content</a>
+    <header class="site-header">
+        <nav class="site-nav site-container" aria-label="Main navigation">
+            <a class="site-brand" href="#home"><svg viewBox="0 0 72 72" aria-hidden="true" fill="currentColor"><path d="M24 0h44v48H46V24H24ZM2 24h22v24H2Zm22 24h22v24H24Zm32 10h14v14H56Z"/></svg>
+<span>EduFocus</span></a>
+            <button class="site-menu-toggle" type="button" aria-expanded="false" aria-controls="site-navigation" hidden>Menu <span aria-hidden="true">☰</span></button>
+            <div class="site-nav-links" id="site-navigation">
+                <a class="site-nav-home" href="#home"  aria-current="page" >Home</a>
+                <a href="#about" data-nav-about>About</a>
+                                    <a href="#features">Features</a>
+                                            <a href="#demo-notice" title="Static demo only">Login (demo)</a>
+                                                </div>
         </nav>
     </header>
-    <main id="main">
-        <section class="hero container" id="home">
-            <div>
-                <p class="eyebrow"><span class="square"></span>Your next chapter starts here</p>
-                <h1>EduFocus<span>Interactive learning<br>for better focus<span class="caret" aria-hidden="true">_</span></span></h1>
-                <p class="lead">Transform your PDF lessons into short, interactive, and easier-to-study learning materials.</p>
-                <a class="button" href="#how-it-works">Explore the demo <span aria-hidden="true">↓</span></a>
-                <p class="hero-note"><strong aria-hidden="true">✛</strong>Less overwhelm. More little wins.</p>
-                <aside class="demo-notice"><strong>Static demo:</strong> This GitHub Pages version is a visual preview. Login, uploads, quizzes, and saved progress need a server and are not active here.</aside>
+    <main id="main-content">    <section class="site-hero site-container" id="home">
+        <div class="site-hero-copy">
+            <p class="site-eyebrow"><span class="site-square"></span> YOUR NEXT CHAPTER STARTS HERE</p>
+            <h1>EduFocus<span>Interactive Learning<br>for Better Focus<span class="site-caret" aria-hidden="true">_</span></span></h1>
+            <p class="site-lead">Transform your PDF lessons into short, interactive and easier-to-study learning materials.</p>
+            <div class="site-actions">
+                <a class="site-button site-button--outline" href="#how-it-works">Learn More <span aria-hidden="true">↓</span></a>
             </div>
-            <div class="art" role="img" aria-label="A pixel-inspired study buddy at a desk with books and notes">
-                <div class="window"><span>■ ■ ▪</span><span>STUDY_BUDDY.EXE</span><span>↗</span></div>
-                <div class="note note-one">FOCUS<br>────────<br>────────</div>
-                <div class="note note-two">STUDY<br>────────<br>────────</div>
-                <div class="note note-center">✦<br>✦</div>
-                <div class="caption">ONE LESSON AT A TIME.<strong>Your focus era<br>starts here.</strong></div>
-                <div class="book">PROGRESS</div><div class="book book-two">STUDY</div>
-                <div class="buddy"><div class="cat"><span class="eyes"><i></i><i></i></span><span class="muzzle"></span></div></div>
-                <div class="pencils" aria-hidden="true"><i></i><i></i><i></i></div>
-                <div class="desk"></div>
-            </div>
-        </section>
-        <div class="ticker" aria-label="Study approach">
-            <div class="ticker-inner container"><span>SHORTER LESSONS</span><b aria-hidden="true">✛</b><span>ACTIVE LEARNING</span><b aria-hidden="true">✛</b><span>BETTER FOCUS</span><b aria-hidden="true">✛</b><span>YOUR OWN PACE</span></div>
+            <p class="site-demo-notice" id="demo-notice">Static demo only: login, uploads, quizzes, and saved progress need the Laravel backend and are not active on GitHub Pages.</p>
+        <div class="site-hero-note"><span aria-hidden="true">✛</span> Less overwhelm. More little wins.</div>
         </div>
-        <section class="section container" id="how-it-works">
-            <div class="section-heading">
-                <div><p class="eyebrow">01 / The study routine</p><h2 class="pixel-heading">How EduFocus works</h2></div>
-                <p>From a full lesson to a small next step.<br>A simpler way to keep moving forward.</p>
-            </div>
-            <ol class="steps">
-                <li><span class="number">01</span><h3>Upload PDF</h3><p>Bring your lesson notes into one study space.</p></li>
-                <li><span class="number">02</span><h3>Analyze lesson</h3><p>Find the concepts that matter most.</p></li>
-                <li><span class="number">03</span><h3>Make materials</h3><p>Break the lesson into manageable pieces.</p></li>
-                <li><span class="number">04</span><h3>Study &amp; practice</h3><p>Practice, recall, and build understanding.</p></li>
-                <li><span class="number">05</span><h3>Track progress</h3><p>See how far your small steps take you.</p></li>
-            </ol>
-        </section>
-        <section class="feature-section" id="features">
-            <div class="section container">
-                <div class="section-heading">
-                    <div><p class="eyebrow">02 / Your study toolkit</p><h2 class="pixel-heading">A little structure.<br>A lot more focus.</h2></div>
-                    <p>Tools designed around the way you learn,<br>one manageable session at a time.</p>
-                </div>
-                <div class="features">
-                    <article class="feature"><span class="icon" aria-hidden="true">↑</span><span class="index">01</span><h3>PDF lesson library</h3><p>Keep your lessons organized and ready for your next study session.</p></article>
-                    <article class="feature"><span class="icon" aria-hidden="true">▤</span><span class="index">02</span><h3>Visual summaries</h3><p>See the big ideas in shorter, easier-to-follow overviews.</p></article>
-                    <article class="feature"><span class="icon" aria-hidden="true">▱</span><span class="index">03</span><h3>Flashcards</h3><p>Turn key concepts into quick moments of active recall.</p></article>
-                    <article class="feature"><span class="icon" aria-hidden="true">?</span><span class="index">04</span><h3>Interactive quizzes</h3><p>Check your understanding and revisit what needs practice.</p></article>
-                    <article class="feature"><span class="icon" aria-hidden="true">◷</span><span class="index">05</span><h3>Pomodoro timer</h3><p>Make room for focused study and well-earned breaks.</p></article>
-                    <article class="feature"><span class="icon" aria-hidden="true">↗</span><span class="index">06</span><h3>Adaptive learning</h3><p>A learning experience designed to grow with your needs.</p></article>
-                    <article class="feature"><span class="icon" aria-hidden="true">▥</span><span class="index">07</span><h3>Progress tracking</h3><p>Keep track of lessons and celebrate each completed step.</p></article>
-                    <article class="feature"><span class="icon" aria-hidden="true">★</span><span class="index">08</span><h3>XP &amp; achievements</h3><p>Make consistent effort feel rewarding, one milestone at a time.</p></article>
-                </div>
-            </div>
-        </section>
-        <section class="goal container" id="about">
-            <p class="eyebrow">A smaller step toward better learning</p>
-            <h2 class="pixel-heading">Make learning<br>feel manageable.</h2>
-            <p>EduFocus is a student project designed to help make long lessons feel more approachable—with shorter study sessions and interactive learning tools.</p>
-            <a class="button" href="#home">Back to top <span aria-hidden="true">↑</span></a>
-        </section>
-    </main>
-    <footer class="footer">
-        <div class="footer-inner container">
-            <a class="brand" href="#home"><svg viewBox="0 0 72 72" aria-hidden="true"><path fill="currentColor" d="M24 0h44v48H46V24H24ZM2 24h22v24H2Zm22 24h22v24H24Zm32 10h14v14H56Z"/></svg><span>EduFocus</span></a>
+        <div class="site-hero-art">
+            <div class="site-window-bar"><span aria-hidden="true">■ ■ ▪</span><span>STUDY_BUDDY.EXE</span><span aria-hidden="true">↗</span></div>
+            <div class="site-buddy-caption"><span>ONE LESSON AT A TIME.</span><p>Your focus era<br>starts here.</p></div>
+            <svg class="auth-study-scene" viewBox="0 0 800 590" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <defs>
+        <pattern id="pencil-dots" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M1 1h2v2H1zm4 4h2v2H5z" fill="#aaa"/></pattern>
+        <clipPath id="left-eye-clip"><path d="M332 259h34v7h14v12h7v36h-7v14h-14v6h-34v-6h-14v-14h-7v-36h7v-12h14z"/></clipPath>
+        <clipPath id="right-eye-clip"><path d="M451 259h34v7h14v12h7v36h-7v14h-14v6h-34v-6h-14v-14h-7v-36h7v-12h14z"/></clipPath>
+    </defs>
+    <!-- Notes pinned above the desk. -->
+    <g stroke="#111" stroke-width="3" stroke-linejoin="miter">
+        <g transform="translate(57 45) rotate(-9)">
+            <path d="M3 8h68v89H3z" fill="#ddd" stroke="none"/>
+            <path d="M0 0h70v91H0z" fill="#f8f8f5"/>
+            <path d="M22 35h4m17 0h4M22 49v5h5v5h14v-5h6v-5"/>
+        </g>
+        <g transform="translate(696 68) rotate(11)">
+            <path d="M4 5h70v89H4z" fill="#ddd" stroke="none"/>
+            <path d="M0 0h70v89H0z" fill="#f8f8f5"/>
+            <path d="M23 36h8v5h7v-5h8v12h-6v6h-6v5h-5v-5h-6z" fill="#111" stroke="none"/>
+        </g>
+        <path d="M491 89h44v4h5v27h-5v5h-29l-9 8v-8h-7v-5h-4V94h5z" fill="#f8f8f5"/>
+        <path d="M500 107h4m9 0h4m9 0h4" stroke-width="4"/>
+        <path d="M174 93v17m-8-8h16M181 79h4m431 68 13-19m-4 35 14-12m-3 30 18-7M259 181l-14-9m14 25-18-3"/>
+    </g>
+    <!-- Separate pupils let the cat look toward the pointer. -->
+    <g fill="#111">
+        <path d="M236 341v-27h9v-18h9v-13h11v-20h12v-60h7v-39h10v-19h10v-9h14v9h15v11h14v13h14v14h14v10h18v-7h7v12h25v-9h7v10h27v-10h8v11h20v-7h10v-9h13v-14h14v-14h15v-14h12v-12h16v8h10v22h9v43h8v50h9v19h12v15h10v22h10v24h-21v25H255v-14z"/>
+        <path d="m244 287-15 8 19 3m-4 20-17 10h23m352-42 17 11-21 3m10 16 17 12h-22"/>
+    </g>
+    <g fill="#777">
+        <path d="M292 232v-39h8v-21h9v10h11v14h12v14h9v12h-20v-8h-9v10h-10v8z"/>
+        <path d="M526 222h-20v-13h11v-14h12v-14h10v-10h8v22h7v40h-11v-10h-9v-10h-8z"/>
+    </g>
+    <g fill="#f8f8f5">
+        <path d="M332 259h34v7h14v12h7v36h-7v14h-14v6h-34v-6h-14v-14h-7v-36h7v-12h14z"/>
+        <path d="M451 259h34v7h14v12h7v36h-7v14h-14v6h-34v-6h-14v-14h-7v-36h7v-12h14z"/>
+    </g>
+    <g clip-path="url(#left-eye-clip)"><g data-cat-pupil data-eye-x="349" data-eye-y="296">
+        <path d="M342 275h15v6h7v29h-7v6h-15v-6h-7v-29h7z" fill="#111"/>
+        <path d="M348 279h8v8h-8z" fill="#fff"/>
+    </g></g>
+    <g clip-path="url(#right-eye-clip)"><g data-cat-pupil data-eye-x="468" data-eye-y="296">
+        <path d="M461 275h15v6h7v29h-7v6h-15v-6h-7v-29h7z" fill="#111"/>
+        <path d="M467 279h8v8h-8z" fill="#fff"/>
+    </g></g>
+    <path d="M404 323h18v6h-5v6h-8v-6h-5z" fill="#999"/>
+    <path d="M413 335v10m-151-25-42-7h-15m65 20-56 3m354-15 45-10h18m-60 23 51 3" stroke="#777" stroke-width="3"/>
+    <!-- Desk edge and little paws. -->
+    <path d="M0 345H800V590H0z" fill="#f8f8f5"/>
+    <path d="M0 345H800" stroke="#111" stroke-width="4"/>
+    <g fill="#111" stroke="#f8f8f5" stroke-width="3">
+        <path d="M271 354v-18h7v-8h13v-5h19v5h12v8h7v18h-9v6h-39v-6z"/>
+        <path d="M534 354v-18h7v-8h13v-5h19v5h12v8h7v18h-9v6h-39v-6z"/>
+    </g>
+    <path d="M287 348v12m17-12v12m246-12v12m17-12v12" stroke="#aaa" stroke-width="3"/>
+    <path d="M252 380h96m13 0h87m13 0h14m22 0h87m11-7h107M315 391h193" stroke="#ddd" stroke-width="3"/>
+    <!-- A stack of well-loved books. -->
+    <g stroke="#111" stroke-width="3.5" stroke-linejoin="bevel">
+        <path d="m-20 334 179-17 35 17v42L8 399l-28-17z" fill="#f8f8f5"/>
+        <path d="m-14 345 182-18 17 9L5 358zm19 13v30l180-21v-31M13 365l14-2m143-16v12"/>
+        <path d="m-22 281 175-15 36 18v39L8 346l-30-16z" fill="#f8f8f5"/>
+        <path d="m-14 290 172-15 23 11L5 305zm19 15v30l177-20v-29M13 312l14-2m141-14v13"/>
+        <path d="m-23 220 165-13 41 18v41L7 292l-30-15z" fill="#f8f8f5"/>
+        <path d="m-14 231 159-15 29 11L5 249zm19 18v31l170-23v-30M13 256l13-2m136-15v12"/>
+        <path d="m-19 200 85-1v4h28v4h28v4h25v4h25v8L5 242l-24-5z" fill="#f8f8f5"/>
+    </g>
+    <g fill="#111" font-family="monospace" font-size="17" font-weight="bold">
+        <text transform="translate(45 273) rotate(-7)">STUDY</text>
+        <text transform="translate(44 327) rotate(-7)">FOCUS</text>
+        <text transform="translate(38 382) rotate(-7)">PROGRESS</text>
+    </g>
+    <!-- Pencil cup. -->
+    <g stroke="#111" stroke-width="3.5">
+        <path d="m728 307-14-64 12-3 18 65zm22-1 9-64 9 1-4 65zm22 1 16-40 10 4-10 40" fill="#f8f8f5"/>
+        <path d="m716 245-1-13 8-2 3 11m35 2 4-11 4 12m-44 7 9 36m30-27-5 27"/>
+        <path d="M710 300h90v90l-9 7h-65l-12-7z" fill="#f8f8f5"/>
+        <path d="M775 311h25v77l-10 6h-15" fill="url(#pencil-dots)" stroke="none"/>
+        <path d="M710 309h90m-80 9v55"/>
+    </g>
+    <!-- Open laptop in the foreground. -->
+    <g stroke="#111" stroke-width="3.5" stroke-linejoin="bevel">
+        <path d="m218 489 208-3 27 9v12L328 587H108z" fill="#f8f8f5"/>
+        <path d="m246 507 114-1-51 37h-92m110 31 126-79"/>
+        <path d="m-27 402 270-20 16 8 56 195H23z" fill="#f8f8f5"/>
+        <path d="m-27 410 266-18 9 6 54 187M21 585h300"/>
+    </g>
+    <path d="m135 467 23-3 4 24-12 2-2-12-11 2zm-10 14 12-2 2 12-12 2zm14 10 12-2 2 12-12 2z" fill="#111"/>
+    <path d="m325 442 23-23m-9 40 27-13" stroke="#111" stroke-width="5"/>
+    <!-- Notebook and pen. -->
+    <g stroke="#111" stroke-width="3" stroke-linejoin="bevel">
+        <path d="m509 465 178-42 127 137-172 48z" fill="#aaa"/>
+        <path d="m509 454 178-35 127 130-173 49z" fill="#f8f8f5"/>
+        <path d="m520 459 124 128m-133-121 126 129m-93-144 116-23"/>
+        <path d="m550 483 5-1 5 5-5 2zm18 20 5-1 5 5-5 2zm18 20 5-1 5 5-5 2zm19 20 5-1 5 5-5 2z"/>
+        <path d="m575 478 96-20m-78 40 99-22m-80 42 97-23m-78 43 100-25" stroke="#aaa"/>
+        <path d="m751 447 10-7 68 60-8 10zm0 0-6-13 16 6" fill="#f8f8f5"/>
+    </g>
+</svg>
+        </div>
+    </section>
+    <div class="site-ticker" aria-label="Study approach"><div class="site-container"><span>SHORTER LESSONS</span><span aria-hidden="true">✛</span><span>ACTIVE LEARNING</span><span aria-hidden="true">✛</span><span>BETTER FOCUS</span><span aria-hidden="true">✛</span><span>YOUR OWN PACE</span></div></div>
+
+    <section class="site-section site-container" id="how-it-works">
+        <div class="site-section-heading"><div><p class="site-eyebrow">01 / THE STUDY ROUTINE</p><h2>How EduFocus works</h2></div><p>From a full lesson to a small next step.<br>A simpler way to keep moving forward.</p></div>
+        <ol class="site-steps">
+                            <li><span class="site-step-number">01</span><h3>Upload PDF</h3><p>Bring your lesson notes into one study space.</p><span class="site-step-arrow" aria-hidden="true">→</span></li>
+                            <li><span class="site-step-number">02</span><h3>Analyze Lesson</h3><p>Find the concepts that matter most.</p><span class="site-step-arrow" aria-hidden="true">→</span></li>
+                            <li><span class="site-step-number">03</span><h3>Generate Learning Materials</h3><p>Break the lesson into manageable pieces.</p><span class="site-step-arrow" aria-hidden="true">→</span></li>
+                            <li><span class="site-step-number">04</span><h3>Study &amp; Take Quizzes</h3><p>Practice, recall, and build understanding.</p><span class="site-step-arrow" aria-hidden="true">→</span></li>
+                            <li><span class="site-step-number">05</span><h3>Track Progress</h3><p>See how far your small steps take you.</p><span class="site-step-arrow" aria-hidden="true">→</span></li>
+                    </ol>
+    </section>
+
+    <section class="site-feature-section" id="features">
+        <div class="site-container site-section">
+            <div class="site-section-heading"><div><p class="site-eyebrow">02 / YOUR STUDY TOOLKIT</p><h2>A little structure.<br>A lot more focus.</h2></div><p>Tools designed around the way you learn,<br>one manageable session at a time.</p></div>
+            <div class="site-features">
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">↑</span><span class="site-card-index">01</span><h3>PDF Lesson Upload</h3><p>Keep your PDF lessons organized and ready for your next study session.</p></article>
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">▤</span><span class="site-card-index">02</span><h3>Visual Summaries</h3><p>See the big ideas in shorter, easier-to-follow overviews.</p></article>
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">▱</span><span class="site-card-index">03</span><h3>Flashcards</h3><p>Turn key concepts into quick moments of active recall.</p></article>
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">?</span><span class="site-card-index">04</span><h3>Interactive Quizzes</h3><p>Check your understanding and revisit what needs practice.</p></article>
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">◷</span><span class="site-card-index">05</span><h3>Pomodoro Timer</h3><p>Make room for focused study and well-earned breaks.</p></article>
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">↗</span><span class="site-card-index">06</span><h3>Adaptive Learning</h3><p>A learning experience designed to grow with your needs.</p></article>
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">▥</span><span class="site-card-index">07</span><h3>Progress Tracking</h3><p>Keep track of your lessons and celebrate each completed step.</p></article>
+                                    <article class="site-feature-card"><span class="site-feature-icon" aria-hidden="true">★</span><span class="site-card-index">08</span><h3>XP and Achievements</h3><p>Make consistent effort feel rewarding, one milestone at a time.</p></article>
+                            </div>
+        </div>
+    </section>
+    <section class="site-container site-about-intro" id="about">
+    <p class="site-eyebrow">A SMALLER STEP TOWARD BETTER LEARNING</p>
+    <h1>About EduFocus<span class="site-caret" aria-hidden="true">_</span></h1>
+    <div class="site-about-grid"><h2>What is<br>EduFocus?</h2><p class="site-lead">EduFocus is an interactive learning platform designed to transform traditional PDF lessons into shorter and more engaging learning materials.</p></div>
+</section>
+<section class="site-container site-story-grid">
+    <article class="site-story-card"><p class="site-eyebrow">01 / THE PROBLEM</p><h2>Long lessons.<br>Wandering minds.</h2><p>Some students have difficulty staying focused during long lessons or while reading lengthy study materials.</p><div class="site-paper-stack" aria-hidden="true"><span>NOTES<br>────────<br>────────<br>────────<br>────────</span><span>MORE NOTES<br>────────<br>────────<br>────────</span></div></article>
+    <article class="site-story-card site-story-card--dark"><p class="site-eyebrow">02 / OUR SOLUTION</p><h2>Less at once.<br>More that sticks.</h2><p>EduFocus allows students to upload PDF lessons and turn them into:</p><ul class="site-checklist"><li>Visual summaries</li><li>Flashcards</li><li>Short reading materials</li><li>Interactive quizzes</li></ul><p>The platform also includes focus and study tools such as Pomodoro sessions, progress tracking, and rewards.</p></article>
+</section>
+<section class="site-container site-goal"><p class="site-eyebrow">03 / OUR GOAL</p><h2>Make learning<br>feel manageable.</h2><p class="site-lead">Help students study in shorter, manageable sessions while making learning more interactive.</p><a class="site-button" href="#demo-notice" title="Static demo only">Find your focus <span aria-hidden="true">↗</span></a></section>
+<section class="site-container site-info-grid">
+    <article id="contact"><p class="site-eyebrow">LET’S KEEP IMPROVING</p><h2>Contact</h2><p>EduFocus is a student study project. For questions, feedback, or help with your account, contact the project team through your class or school’s project channel.</p></article>
+    <article id="privacy"><p class="site-eyebrow">YOUR STUDY SPACE</p><h2>Privacy</h2><p>Your account details identify your study space. Uploaded lessons are accessible through your signed-in account, and you can delete them from your library. Timer settings are saved in this browser; completed focus sessions, study streaks, and PDF pages you view are saved to your account. The current version does not send PDFs to an external AI service.</p></article>
+</section>
+</main>
+    <footer class="site-footer">
+        <div class="site-container site-footer-inner">
+            <a class="site-brand" href="#home"><svg viewBox="0 0 72 72" aria-hidden="true" fill="currentColor"><path d="M24 0h44v48H46V24H24ZM2 24h22v24H2Zm22 24h22v24H24Zm32 10h14v14H56Z"/></svg>
+<span>EduFocus</span></a>
             <p>Small steps. Every day.</p>
-            <small>© <span id="year"></span> EduFocus · Static project demo</small>
+            <nav aria-label="Footer navigation"><a href="#about">About</a><a href="#contact">Contact</a><a href="#privacy">Privacy</a></nav>
+            <small>© 2026 EduFocus</small>
         </div>
     </footer>
-    <script>
-        const menuButton = document.querySelector('.menu');
-        const navLinks = document.querySelector('.links');
-        menuButton.addEventListener('click', () => {
-            const open = menuButton.getAttribute('aria-expanded') !== 'true';
-            menuButton.setAttribute('aria-expanded', String(open));
-            navLinks.classList.toggle('open', open);
-        });
-        navLinks.addEventListener('click', (event) => {
-            if (event.target.closest('a')) {
-                menuButton.setAttribute('aria-expanded', 'false');
-                navLinks.classList.remove('open');
-            }
-        });
-        document.querySelector('#year').textContent = new Date().getFullYear();
-    </script>
 </body>
 </html>
+
